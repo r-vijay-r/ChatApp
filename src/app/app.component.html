@@ -1,0 +1,61 @@
+<md-sidenav-layout fullscreen>
+
+  <md-sidenav #sidenav>
+    <span>Active Users</span><br>
+    <md-nav-list > 
+      <ul class="list-group users-list" style="margin-top: 10px;" *ngIf="(af.auth | async)">
+        <li class="list-group-item"  *ngFor="let item of items | async">
+          <img md-card-avatar src="{{item.photo}}" style="width: 40px;height: 40px;">
+          <span md-line>{{item.name}}</span>
+        </li>
+      </ul>
+    </md-nav-list>
+  </md-sidenav>
+
+<md-toolbar color="primary">
+  <span>
+    <button md-icon-button color="accent" (click)="sidenav.open()">
+      <md-icon>menu</md-icon>
+    </button>
+  </span>
+
+  <span style="font-family: 'Pacifico', serif;">{{title}}</span> 
+    
+  <span class="example-fill-remaining-space"></span>
+
+  <span *ngIf="!(af.auth | async)" >
+    <button color="warn" md-mini-fab (click)= "login()" >Login</button>
+  </span>
+  <span style="font-family: 'Pacifico', serif;" *ngIf="(af.auth | async)"> 
+    Welcome {{(af.auth | async)?.auth.displayName}} 
+  </span> 
+  <span *ngIf="(af.auth | async)">
+      <button md-avatar-button md-mini-fab (click)="menucard=!menucard" on-mouseover="menucard=true">
+        <img md-card-avatar src="{{(af.auth | async).auth.photoURL}}" style="width: 40px;height: 40px;">
+      </button>
+    </span>
+ </md-toolbar> 
+    <md-card *ngIf="menucard" class="menucard">
+      <md-icon (click)="menucard=false" style="float:right;float: top;line-height: 0;cursor: pointer;">close</md-icon>
+      <img md-card-avatar  [alt]= "Login" src="{{(af.auth | async).auth.photoURL}}">
+      <span>{{(af.auth | async)?.auth.displayName}}</span><br>
+      <span style="color: blue;">{{(af.auth | async)?.auth.email}}</span>
+      <md-card-actions align="end"(click)="menucard=!menucard">
+        <button md-raised-button  color="warn" (click)= "logout(mykey)" >Logout</button>
+      </md-card-actions>
+    </md-card> 
+    <md-card style="width:85%">
+      hellolo this is a m3ssag3
+        
+      <form #form="ngForm" (ngSubmit)="submit()" *ngIf="active">
+      <div style="width:80%;float:left;margin-top: 30px;">
+        <md-input placeholder="Message" maxlength="300" class="demo-full-width" name="mssg" #mssg required (keypress)="message(mssg.value)">
+          <md-hint align="end">{{mssg.characterCount}} / 300</md-hint>
+        </md-input>
+      </div>
+      <div style="float:left;margin-top: 50px;">
+        <button md-icon-button color="primary" type="submit" [disabled]="mssg.characterCount==0"><md-icon>send</md-icon></button>
+      </div>
+      </form>
+    </md-card>
+</md-sidenav-layout>
